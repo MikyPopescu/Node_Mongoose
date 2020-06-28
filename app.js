@@ -17,8 +17,16 @@ const fruitSchema = new mongoose.Schema({
   review: String
 });
 
+//Relationship
+const personSchema = new mongoose.Schema({
+  name: String,
+  age: Number,
+  favouriteFruit: fruitSchema
+})
+
 //collection (converts to plural)
 const Fruit = mongoose.model("Fruit", fruitSchema);
+const Person = mongoose.model("Person",personSchema);
 
 //document
 const apple = new Fruit({
@@ -29,6 +37,32 @@ const apple = new Fruit({
 
 //save the apple document into a Fruits collection inside the fruitsDB
 apple.save(); 
+
+const person = new Person({
+  name: "Miky",
+  age: 21,
+  favouriteFruit: apple
+});
+
+person.save();
+
+const mango = new Fruit({
+  name: "Mango",
+  raiting: 8,
+  review: "Refreshing!"
+});
+
+mango.save();
+
+Person.updateOne({name:"Miky"},{favouriteFruit:mango},function(err){
+  if(err){
+    console.log(err);
+  }
+  else{
+    console.log("Succesfully updated the document!");
+  }
+})
+
 
 //insertMany
 const kiwi = new Fruit({
