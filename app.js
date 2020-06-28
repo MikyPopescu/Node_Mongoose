@@ -4,8 +4,16 @@ mongoose.connect("mongodb://localhost:27017/fruitsDB",{useUnifiedTopology:true, 
 
 //structure of the data
 const fruitSchema = new mongoose.Schema({
-  name: String,
-  raiting: Number,
+      //validation
+  name:{
+    type:String,
+    required: [true, "Please check your data entry, no name specified!"] //not null
+  },
+  raiting: {
+    type: Number,
+    min: 1,
+    max: 10
+  },
   review: String
 });
 
@@ -50,4 +58,38 @@ Fruit.insertMany([kiwi,orange,banana],function(err){
   }
 });
 
+//READ
+//Goes into the Fruits Collection, calls the find method, when completed callback is triggered, if anything goes wrong err, else logs all the results from find
+Fruit.find(function(err,fruits){
+  if(err){
+    console.log(err);
+  }
+  else{
+    fruits.forEach(fruit => {
+      console.log(fruit.name);
+    });
+  //console.log(fruit);
+  }
+});
+
+//UPDATE
+Fruit.updateOne({_id:"5ef86999098f1d4bd4e01271"},{name:"Peach"},function(err){
+  if(err){
+    console.log(err);
+  }
+  else{
+    console.log("Succesfully updated the document");
+    
+  }
+});
+
+//DELETE
+Fruit.deleteOne({name:"Peach"},function(err){
+  if(err){
+    console.log(err);
+  }
+  else{
+    console.log("Succesfully deleted the document");
+  }
+});
 
